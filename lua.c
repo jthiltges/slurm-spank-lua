@@ -219,7 +219,7 @@ static int l_spank_get_item_val (lua_State *L, spank_t sp, spank_item_t item)
     if (err != ESPANK_SUCCESS)
         return l_spank_error (L, err);
 
-    lua_pushnumber (L, val);
+    lua_pushinteger (L, val);
     return (1);
 }
 
@@ -318,7 +318,7 @@ static int l_spank_get_item_gids (lua_State *L, spank_t sp)
 
     lua_newtable (L);
     for (i = 0; i < ngids; i++) {
-        lua_pushnumber (L, gids[i]);
+        lua_pushinteger (L, gids[i]);
         lua_rawseti (L, -2, i+1);
     }
     return (1);
@@ -337,7 +337,7 @@ l_spank_id_query (lua_State *L, spank_t sp, spank_item_t item)
     if (err != ESPANK_SUCCESS)
         return l_spank_error (L, err);
 
-    lua_pushnumber (L, rv);
+    lua_pushinteger (L, rv);
     return (1);
 }
 
@@ -350,19 +350,19 @@ static int l_spank_get_exit_status (lua_State *L, spank_t sp)
     if (err != ESPANK_SUCCESS)
         return l_spank_error (L, err);
 
-    lua_pushnumber (L, status);
+    lua_pushinteger (L, status);
     /*
      *  Now push WEXITSTATUS or nil if !WIFEXITED and
      *   WTERMSIG, WCOREDUMP or nil if !WIFSIGNALED
      */
     if (WIFEXITED (status))
-        lua_pushnumber (L, WEXITSTATUS (status));
+        lua_pushinteger (L, WEXITSTATUS (status));
     else
         lua_pushnil (L);
 
     if (WIFSIGNALED (status)) {
-        lua_pushnumber (L, WTERMSIG (status));
-        lua_pushnumber (L, WCOREDUMP (status));
+        lua_pushinteger (L, WTERMSIG (status));
+        lua_pushinteger (L, WCOREDUMP (status));
     }
     else {
         lua_pushnil (L);
@@ -562,7 +562,7 @@ static int lua_spank_option_callback (int val, const char *optarg, int remote)
     L = o->script->L;
 
     lua_getglobal (L, o->l_function);
-    lua_pushnumber (L, o->l_val);
+    lua_pushinteger (L, o->l_val);
     lua_pushstring (L, optarg);
     lua_pushboolean (L, remote);
 
@@ -920,7 +920,7 @@ static int l_spank_log_msg (lua_State *L)
 
     if (level == -1) {
         slurm_error ("%s", msg);
-        lua_pushnumber (L, -1);
+        lua_pushinteger (L, -1);
         return (1);
     }
 
@@ -958,10 +958,10 @@ static int SPANK_table_create (lua_State *L)
     /*
      *  SPANK.SUCCESS and SPANK.FAILURE
      */
-    lua_pushnumber (L, -1);
+    lua_pushinteger (L, -1);
     lua_setfield (L, -2, "FAILURE");
 
-    lua_pushnumber (L, 0);
+    lua_pushinteger (L, 0);
     lua_setfield (L, -2, "SUCCESS");
 
     lua_setglobal (L, "SPANK");
